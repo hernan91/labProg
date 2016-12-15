@@ -121,7 +121,7 @@
 <div class="ui segment <?php echo (isset($productData))?'hidden':''?> ">
 	<h3 class="ui dividing header"><b>Contenido multimedia del producto seleccionado</b></h3>
 	<div class="ui grid"> <!--internally celled-->
-		<div class="ten wide column">
+		<div class="nine wide column">
 			<div class="ui segment">
 				<div class="ui small images">
 					<?php
@@ -154,7 +154,7 @@
 				<form id="imageForm" class="ui form" action="" method="post" enctype="multipart/form-data">
 					<div class="ui dividing header"></div>
 					<div class="ui header">Subir nueva imagen</div>
-					<div class="field">
+					<div class="inline field">
 						<input type="hidden" name="product_id" value="<?php echo $productData['id']?>">
 						<input class="ui button" type="file" name="imageFile" id="imageFile">
 						<div id="uploadImageButton" class="ui button">Subir</div>
@@ -162,7 +162,7 @@
 				</form>
 			</div>
 		</div>
-		<div class="six wide column">
+		<div class="seven wide column">
 			<div class="ui segment">
 				<?php
 					echo '<i data-code="'.$productCode.'" data-product-id="'.$productData['id'].'" video-ext="'.$productData['videoExtension'].'" id="videoRemove" class="remove icon"></i>';
@@ -172,7 +172,7 @@
 				<form id="videoForm" class="ui form" class="ui form" action="" method="post" enctype="multipart/form-data">
 					<div class="ui dividing header"></div>
 					<div class="ui header">Subir/reemplazar video</div>
-					<div class="field">
+					<div class="inline field">
 						<input type="hidden" name="product_id" value="<?php echo $productData['id']?>">
 						<input class="ui button" type="file" name="videoFile" id="videoFile">
 						<div id="uploadVideoButton" class="ui button">Subir</div>

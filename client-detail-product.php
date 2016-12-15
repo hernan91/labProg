@@ -15,23 +15,7 @@
 	$productImagesData = api_internal_products_getProductImagesData($productData['id']);
 	if(count($productImagesData)>0) $firstImageFilename = $productImagesData[0]['id'].'.'.$productImagesData[0]['extension'];
 	else $firstImageFilename = "";
-	/*$success = isset($_GET['success']);
-	$error = isset($_GET['error']);*/
 ?>
-
-<!--
-<div class="ui <?php echo $success?"":"hidden" ?> success message">
-	<i class="close icon"></i>
-	<div class="header">Operacion completada correctamente</div>
-	<p><?php echo $success?$_GET['success']:""?></p>
-</div>
-
-<div class="ui <?php echo $error?"":"hidden" ?> error message">
-	<i class="close icon"></i>
-	<div class="header">Surgió un error al realizar la operación</div>
-	<p><?php echo $error?$_GET['error']:""?></p>
-</div>
--->
 
 <div class="ui <?php echo (isset($productData))?'hidden':''?> warning message">
 	<div class="header">Advertencia</div>
@@ -68,32 +52,27 @@
 						<a class="item" data-tab="third">Video</a>
 					</div>
 					<div class="ui bottom attached tab segment active" data-tab="first">
-						<div class="ui list">
-							<div class="item">
-								<div class="header">Código</div>
-								<?php echo $productData['code']?>
-							</div>
-							<div class="item">
-								<div class="header">Nombre</div>
-								<?php echo $productData['name']?>
-							</div>
+						<div class="ui segment">
+							<b class="res">Código</b><?php echo $productData['code']?>
+							<div class="ui divider"></div>
+							
+							<b class="res">Nombre</b><?php echo $productData['name']?>
+							<div class="ui divider"></div>
+							
 							<div style="display: <?php echo isset($_SESSION['logged'])?"block":"none"?>"class="item">
-								<div class="header">Precio</div>
-								<?php echo $productData['price']?>
+								<b class="res">Precio</b><?php echo $productData['price']?>
 							</div>
-							<div class="item">
-								<div class="header">Categoría</div>
-								<?php echo $productData['catName']?>
-							</div>
-							<div class="item">
-								<div class="header">Fabricante</div>
-								<?php echo $productData['manufacturer']?>
-							</div>
-							<div class="item">
-								<div class="header">Stock</div>
-								<?php echo $productData['stock']?>
-							</div>
+							<div class="ui divider"></div>
+							
+							<b class="res">Categoría</b><?php echo $productData['catName']?>
+							<div class="ui divider"></div>
+						
+							<b class="res">Fabricante</b><?php echo $productData['manufacturer']?>
+							<div class="ui divider"></div>
+							
+							<b class="res">Stock</b><?php echo $productData['stock']?>
 						</div>
+						<style>	b.res{ margin-right:30px;} </style>
 					</div>
 					<div class="ui bottom attached tab segment" data-tab="second">
 						<?php 
