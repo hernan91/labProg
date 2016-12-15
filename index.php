@@ -1,0 +1,146 @@
+<?php 
+	define('PAGE', "index"); 
+	define('LEVEL', 1);
+	include_once 'api/auth.php';
+?>
+
+	<?php 
+		include("clientSections/section-top.php");
+		include_once 'components/cardProduct.php';
+		include_once 'components/cardProductMostSelled.php';
+		include_once 'api/internal/products.php';
+		include_once 'api/internal/categories.php';
+		include_once 'components/modalConfirm.php';
+		components_modal_confirm("Confirmar acción", "¿Esta seguro de que desea agregar este producto al carrito?", "modalConfirmacion");
+		
+		$mostSelledProductsList;
+		$categoryProductsList;
+		$searchedProductsList;
+		$searched = false;
+		$categoriesList = api_internal_categories_getAllCategoriesData();
+
+		$mostSelledProductsList = api_internal_products_getMostSelledAvailableProducts();
+		$title = "Productos mas vendidos";
+
+		if(isset($_GET['categoryId'])){
+			$categoryId = $_GET['categoryId'];
+			$categoryData = api_internal_categories_getCategoryData($categoryId);
+			$categoryProductsList = api_internal_products_getAllAvailableProductsBasicDataByCategory($categoryId);
+			$title = 'Productos de la categoría '.$categoryData['name'];
+		}
+		else if(isset($_GET['productName'])){
+			$productName = $_GET['productName'];
+			$productCode = $_GET['productCode'];
+			$productCategoryId = $_GET['productCategoryId'];
+			$productManufacturer = $_GET['productManufacturer'];
+			$productMinPrice = $_GET['productMinPrice'];
+			$productMaxPrice = $_GET['productMaxPrice'];
+			$searchedProductsList = api_internal_products_getActiveProductsWithFilter($productName, $productCode, $productCategoryId, $productManufacturer, $productMinPrice, $productMaxPrice);
+			$searched = !empty($productName) || !empty($productCode) || !empty($productCategoryId) || !empty($productManufacturer) || !empty($productMinPrice) || !empty($productMaxPrice);
+		}
+		else{
+			$allProductsList = api_internal_products_getAllAvailableProductsBasicData();
+		}
+
+		
+		$registered = true;
+	?>
+	<div class="ui raised segment">
+		<div>
+			<form method="GET" class="ui form" id="formBusquedaFiltrada">
+				<h3 style="display: inline" class="ui dividing header"><b>Busqueda filtrada de todos los productos</b></h3><span id="botonLimpieza" style="margin-left:10px; color:blue">Limpiar</span>
+				<div class="ui segment">
+				<div class="ui grid">
+					<div class="three wide field">
+						<label>Nombre</label>
+						<input type="text" name="productName" value="<?php echo $searched?$productName:"" ?>">
+					</div>
+					<div class="two wide field">
+						<label>Código</label>
+						<input type="text" name="productCode" value="<?php echo $searched?$productCode:"" ?>">
+					</div>
+					<div class="three wide field">
+						<label>Categoría</label>
+						<select class="ui selection dropdown" id="dropCat" name="productCategoryId">
+							<option value="">Ninguna</option>
+							<?php
+								foreach($categoriesList as $category){
+									echo '<option  >'.$category["name"].'</option>';
+									echo'<option value="'.$category["id"].'"'.(isset($searched) && $searched && $category["id"]==$productCategoryId)?"selected":"".'>'.$category["name"].'</option>';
+								}
+							?>
+							
+
+						</select>
+					</div>
+					<div class="three wide field">
+						<label>Fabricante</label>
+						<input type="text" name="productManufacturer" value="<?php echo $searched?$productManufacturer:"" ?>">
+					</div>
+					<div class="three wide column" style="padding:0px">
+						<div class="fields">
+							<div class="field">
+								<label>Precio min</label>
+								<input type="number" placeholder="Minimo" name="productMinPrice" value="<?php echo $searched?$productMinPrice:"" ?>">	
+							</div>
+							<div class="field">
+								<label>Precio max</label>
+								<input type="number" placeholder="Máximo" name="productMaxPrice" value="<?php echo $searched?$productMaxPrice:"" ?>">
+							</div>
+						</div>
+					</div>
+					<div class="two wide column" style="margin-top:9px">
+						<input type="submit" class="ui basic blue button" id="botonBuscar"></input>
+					</div>
+				</div>
+				</div>
+				<div class="ui error message"></div>
+			</form>
+		</div>
+	</div>
+	<div class="ui raised segment">
+		<h3 class="ui header"><?php echo $searched?"Todos los productos (filtrados)":"Todos los productos" ?></h3>
+		<div class="ui cards">
+			<?php
+				if(isset($searchedProductsList)){
+					echo count($searchedProductsList)==0&&$searched?"<span>No se encontro ningún producto que cumpla con las características<span>":"";
+					foreach($searchedProductsList as $product){
+						$firstImage = api_internal_products_getFirstImg($product['id']);
+						components_cardProduct($product['id'], $product['name'], $product['code'], $product['manufacturer'], $product['catName'], $product['price'], $firstImage['id'], $firstImage['extension'], $product['stock'], isset($_SESSION['logged']));
+					}
+				}
+				else if(isset($categoryProductsList)){
+					foreach($categoryProductsList as $categoryProduct){
+						$firstImage = api_internal_products_getFirstImg($categoryProduct['id']);
+						components_cardProduct($categoryProduct['id'], $categoryProduct['name'], $categoryProduct['code'], $categoryProduct['manufacturer'], $categoryProduct['catName'], $categoryProduct['price'], $firstImage['id'], $firstImage['extension'], $categoryProduct['stock'], isset($_SESSION['logged']));
+					}
+				}
+			?>
+		</div>
+	</div>
+	<div style="margin-top:100px;"></div>
+	<div class="ui raised segment">
+		<h3 class="ui header"><?php echo isset($allProductsList)?"Todos los productos":"" ?></h3>
+		<div class="ui four cards">
+			<?php
+				if(isset($mostSelledProductsList)){
+					foreach($mostSelledProductsList as $selledProduct){
+						$firstImage = api_internal_products_getFirstImg($selledProduct['id']);
+						components_cardProductMostSelled($selledProduct['id'], $selledProduct['name'], $selledProduct['code'], $selledProduct['manufacturer'], $selledProduct['catName'], $selledProduct['price'], $firstImage['id'], $firstImage['extension'], $selledProduct['quantity'], $selledProduct['stock'], isset($_SESSION['logged']));
+					}
+				}
+			?>
+		</div>
+	</div>
+	
+	<?php include("clientSections/section-bottom.php") ?>
+
+<script>
+	$(function(){
+		$('#dropCat').dropdown();
+		$('#botonLimpieza').click(function(e){
+			e.preventDefault();
+			$('#formBusquedaFiltrada.ui.form').form('reset');
+		});
+	});
+</script>
