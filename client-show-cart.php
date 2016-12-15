@@ -35,10 +35,14 @@
 		}
 		
 		else if($operation=='end'){
-			if(userHasNoEmailOrDirectionOrPhone($_SESSION['id'])) echo '<script type="text/javascript">window.location.href="client-edit-profile.php?error=Debe completar todos sus datos antes de realizar la compra"</script>';
-			$error = api_internal_sales_finishSale($_SESSION['id']);
+			if(userHasNoEmailOrDirectionOrPhone($_SESSION['id'])){
+				echo '<script type="text/javascript">window.location.href="client-edit-profile.php?error=Debe completar todos sus datos antes de realizar la compra"</script>';
+			}
+			else{
+				$error = api_internal_sales_finishSale($_SESSION['id']);
 			if(!is_bool($error)) echo '<script type="text/javascript">window.location.href="client-show-cart.php?error='.$error.'"</script>';
 			echo '<script type="text/javascript">window.location.href="client-show-cart.php?success=La compra se ha realizado correctamente"</script>';
+			}
 		}
 	}
 ?>

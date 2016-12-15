@@ -44,7 +44,7 @@
 	<div class="ui raised segment">
 		<div>
 			<form method="GET" class="ui form" id="formBusquedaFiltrada">
-				<h3 style="display: inline" class="ui dividing header"><b>Filtrar productos</b></h3><span id="botonLimpieza" style="margin-left:10px; color:blue">Limpiar</span>
+				<h3 style="display: inline" class="ui dividing header"><b>Filtrar productos</b></h3><a href="index.php" style="margin-left:10px">Limpiar</a>
 				<div class="ui segment">
 				<div class="ui grid">
 					<div class="three wide field">
@@ -141,10 +141,6 @@
 		});
 
 		$('#dropCat').dropdown();
-		$('#botonLimpieza').click(function(e){
-			e.preventDefault();
-			$('#formBusquedaFiltrada.ui.form').form('reset');
-		});
 		$('.ui.form').form({
 			on:'blur',
 			inline : true,

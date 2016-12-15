@@ -120,7 +120,7 @@
 						<button id="addToCartButton" class="ui black labeled icon button">
 							<i class="cart icon"></i>Agregar al carrito
 						</button>
-						<input style="border-color:black; width:60px" name="quantity" type="number" min="1" value="1" max="<?php echo $productData['stock']?>">
+						<input style="border-color:black;width:50px;padding-right: 0px;padding-left: 5px;" name="quantity" type="number" min="1" value="1" max="<?php echo $productData['stock']?>">
 					</form>
 				</div>
 			</div>

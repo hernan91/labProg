@@ -1,6 +1,6 @@
 <div class="ui container">
 	<div class="ui secondary pointing menu">
-	<a href="index.php" class="active item">
+	<a href="index.php" class="<?php echo (PAGE=="index")?"active":""?> item">
 		Inicio
 	</a>
 	<?php
@@ -27,7 +27,7 @@
 		<?php
 			if(isset($_SESSION['name'])){
 				echo '
-					<div style="margin-right:30px; color:blue;" class="ui item">
+					<div style="margin-right:30px; color:#549bd8;" class="ui item">
 						Bienvenido, '.$_SESSION['name'].'! 
 					</div>
 				';
@@ -39,6 +39,7 @@
 						';
 						
 				}
+				$activeCart = (PAGE=="client-show-cart"||PAGE=="client-show-story"||PAGE=="client-edit-profile")?"active":"";
 				echo '
 					<div class="drop ui dropdown item">
 						Carro de compras

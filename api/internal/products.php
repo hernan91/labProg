@@ -336,10 +336,11 @@
 		$query = "SELECT P.`id`, P.`code`, P.`name`, P.`price`, C.`name` as catName, P.`manufacturer`, P.`state`, P.`stock` FROM `products` AS P, `categories` AS C WHERE P.`state`='Activo' AND P.`stock`>0 AND C.`id`=P.`category_id` ";
 		if(!empty($productName)) $query .= "AND P.`name` LIKE '%$productName%' ";
 		if(!empty($productCode)) $query .= "AND P.`code` LIKE '%$productCode%' ";
-		if(!empty($productCategoryId)) $query .= "AND C.`id`='.$productCategoryId.' ";		
-		if(!empty($manufacturer)) $query .= "AND P.`manufacturer` LIKE '%$productManufacturer%' ";	
+		if(!empty($productCategoryId)) $query .= "AND C.`id`='$productCategoryId' ";		
+		if(!empty($productManufacturer)) $query .= "AND P.`manufacturer` LIKE '%$productManufacturer%' ";	
 		if(!empty($productMinPrice)) $query .= "AND P.`price` >= '$productMinPrice' ";	
 		if(!empty($productMaxPrice)) $query .= "AND P.`price` <= '$productMaxPrice' ";
+		echo $query;
 		$con = new Conexion();
 		if($con->connect()){
 			$rows = array();
