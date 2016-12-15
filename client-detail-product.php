@@ -90,10 +90,6 @@
 								<?php echo $productData['manufacturer']?>
 							</div>
 							<div class="item">
-								<div class="header">Estado</div>
-								<?php echo $productData['state']?>
-							</div>
-							<div class="item">
 								<div class="header">Stock</div>
 								<?php echo $productData['stock']?>
 							</div>

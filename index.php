@@ -13,51 +13,47 @@
 		include_once 'components/modalConfirm.php';
 		components_modal_confirm("Confirmar acción", "¿Esta seguro de que desea agregar este producto al carrito?", "modalConfirmacion");
 		
-		$mostSelledProductsList;
-		$categoryProductsList;
-		$searchedProductsList;
 		$searched = false;
-		$categoriesList = api_internal_categories_getAllCategoriesData();
-
+		if(!isset($categoriesList)) $categoriesList = api_internal_categories_getAllCategoriesData();
+		
 		$mostSelledProductsList = api_internal_products_getMostSelledAvailableProducts();
-		$title = "Productos mas vendidos";
-
-		if(isset($_GET['categoryId'])){
-			$categoryId = $_GET['categoryId'];
-			$categoryData = api_internal_categories_getCategoryData($categoryId);
-			$categoryProductsList = api_internal_products_getAllAvailableProductsBasicDataByCategory($categoryId);
-			$title = 'Productos de la categoría '.$categoryData['name'];
-		}
-		else if(isset($_GET['productName'])){
-			$productName = $_GET['productName'];
-			$productCode = $_GET['productCode'];
-			$productCategoryId = $_GET['productCategoryId'];
-			$productManufacturer = $_GET['productManufacturer'];
-			$productMinPrice = $_GET['productMinPrice'];
-			$productMaxPrice = $_GET['productMaxPrice'];
-			$searchedProductsList = api_internal_products_getActiveProductsWithFilter($productName, $productCode, $productCategoryId, $productManufacturer, $productMinPrice, $productMaxPrice);
-			$searched = !empty($productName) || !empty($productCode) || !empty($productCategoryId) || !empty($productManufacturer) || !empty($productMinPrice) || !empty($productMaxPrice);
+		if(isset($_GET['productCategoryId'])){
+			//si se realizo alguna busqueda
+			if(!isset($_GET['productName'])){
+				$productCategoryId = $_GET['productCategoryId'];
+				//$category = array_keys(array_column($categoriesList, 'name'), $productCategoryId);
+				//$title = "Productos de la categoría ".$category['name'];
+				$searchedProductsList = api_internal_products_getActiveProductsWithFilter("", "", $productCategoryId, "", "", "");
+				$searched = true;
+			}
+			else{
+				$productName = $_GET['productName'];
+				$productCode = $_GET['productCode'];
+				$productCategoryId = $_GET['productCategoryId'];
+				$productManufacturer = $_GET['productManufacturer'];
+				$productMinPrice = $_GET['productMinPrice'];
+				$productMaxPrice = $_GET['productMaxPrice'];
+				$searchedProductsList = api_internal_products_getActiveProductsWithFilter($productName, $productCode, $productCategoryId, $productManufacturer, $productMinPrice, $productMaxPrice);
+				$searched = !empty($productName) || !empty($productCode) || !empty($productCategoryId) || !empty($productManufacturer) || !empty($productMinPrice) || !empty($productMaxPrice);
+			}
 		}
 		else{
-			$allProductsList = api_internal_products_getAllAvailableProductsBasicData();
+			$searchedProductsList = api_internal_products_getAllAvailableProductsBasicData();
 		}
-
-		
-		$registered = true;
 	?>
 	<div class="ui raised segment">
 		<div>
 			<form method="GET" class="ui form" id="formBusquedaFiltrada">
-				<h3 style="display: inline" class="ui dividing header"><b>Busqueda filtrada de todos los productos</b></h3><span id="botonLimpieza" style="margin-left:10px; color:blue">Limpiar</span>
+				<h3 style="display: inline" class="ui dividing header"><b>Filtrar productos</b></h3><span id="botonLimpieza" style="margin-left:10px; color:blue">Limpiar</span>
 				<div class="ui segment">
 				<div class="ui grid">
 					<div class="three wide field">
 						<label>Nombre</label>
-						<input type="text" name="productName" value="<?php echo $searched?$productName:"" ?>">
+						<input type="text" name="productName" value="<?php echo (isset($productName)&&$productName)?$productName:"" ?>">
 					</div>
 					<div class="two wide field">
 						<label>Código</label>
-						<input type="text" name="productCode" value="<?php echo $searched?$productCode:"" ?>">
+						<input type="text" name="productCode" value="<?php echo (isset($productCode)&&$productCode)?$productCode:"" ?>">
 					</div>
 					<div class="three wide field">
 						<label>Categoría</label>
@@ -65,8 +61,8 @@
 							<option value="">Ninguna</option>
 							<?php
 								foreach($categoriesList as $category){
-									echo '<option  >'.$category["name"].'</option>';
-									echo'<option value="'.$category["id"].'"'.(isset($searched) && $searched && $category["id"]==$productCategoryId)?"selected":"".'>'.$category["name"].'</option>';
+									$selected = (isset($searched) && $searched && $category["id"]==$productCategoryId)?"selected":"";
+									echo'<option value="'.$category["id"].'" '.$selected.'>'.$category["name"].'</option>';
 								}
 							?>
 							
@@ -75,17 +71,17 @@
 					</div>
 					<div class="three wide field">
 						<label>Fabricante</label>
-						<input type="text" name="productManufacturer" value="<?php echo $searched?$productManufacturer:"" ?>">
+						<input type="text" name="productManufacturer" value="<?php echo (isset($productManufacturer)&&$productManufacturer)?$productManufacturer:"" ?>">
 					</div>
 					<div class="three wide column" style="padding:0px">
 						<div class="fields">
 							<div class="field">
 								<label>Precio min</label>
-								<input type="number" placeholder="Minimo" name="productMinPrice" value="<?php echo $searched?$productMinPrice:"" ?>">	
+								<input type="number" placeholder="Minimo" name="productMinPrice" value="<?php echo (isset($productMinPrice)&&$productMinPrice)?$productMinPrice:"" ?>">	
 							</div>
 							<div class="field">
 								<label>Precio max</label>
-								<input type="number" placeholder="Máximo" name="productMaxPrice" value="<?php echo $searched?$productMaxPrice:"" ?>">
+								<input type="number" placeholder="Máximo" name="productMaxPrice" value="<?php echo (isset($productMaxPrice)&&$productMaxPrice)?$productMaxPrice:"" ?>">
 							</div>
 						</div>
 					</div>
@@ -109,18 +105,12 @@
 						components_cardProduct($product['id'], $product['name'], $product['code'], $product['manufacturer'], $product['catName'], $product['price'], $firstImage['id'], $firstImage['extension'], $product['stock'], isset($_SESSION['logged']));
 					}
 				}
-				else if(isset($categoryProductsList)){
-					foreach($categoryProductsList as $categoryProduct){
-						$firstImage = api_internal_products_getFirstImg($categoryProduct['id']);
-						components_cardProduct($categoryProduct['id'], $categoryProduct['name'], $categoryProduct['code'], $categoryProduct['manufacturer'], $categoryProduct['catName'], $categoryProduct['price'], $firstImage['id'], $firstImage['extension'], $categoryProduct['stock'], isset($_SESSION['logged']));
-					}
-				}
 			?>
 		</div>
 	</div>
 	<div style="margin-top:100px;"></div>
 	<div class="ui raised segment">
-		<h3 class="ui header"><?php echo isset($allProductsList)?"Todos los productos":"" ?></h3>
+		<h3 class="ui header">Productos mas vendidos</h3>
 		<div class="ui four cards">
 			<?php
 				if(isset($mostSelledProductsList)){
@@ -137,10 +127,53 @@
 
 <script>
 	$(function(){
+		let addToCartForm;
+		$('#modalConfirmacion.ui.basic.modal').modal({
+			closable: false,
+			onApprove: function(){
+				addToCartForm.submit();
+			}
+		});
+		$('.addToCartAnchor').click(function(e){
+			e.preventDefault();
+			addToCartForm = $(e.target).parents('form');
+			$('#modalConfirmacion.ui.basic.modal').modal('show');
+		});
+
 		$('#dropCat').dropdown();
 		$('#botonLimpieza').click(function(e){
 			e.preventDefault();
 			$('#formBusquedaFiltrada.ui.form').form('reset');
+		});
+		$('.ui.form').form({
+			on:'blur',
+			inline : true,
+			fields: {
+				code: {
+					identifier : 'productCode',
+					optional: true,
+					rules: [{
+						type   : 'integer',
+						prompt : 'Por favor, ingrese valor númerico para el código'
+					}]
+				},
+				productMinPrice: {
+					identifier : 'productMinPrice',
+					optional: true,
+					rules: [{
+						type   : 'integer',
+						prompt : 'Por favor, ingrese valor númerico para el código'
+					}]
+				},
+				productMaxPrice: {
+					identifier : 'productMaxPrice',
+					optional: true,
+					rules: [{
+						type   : 'integer',
+						prompt : 'Por favor, ingrese valor númerico para el código'
+					}]
+				}
+			}
 		});
 	});
 </script>

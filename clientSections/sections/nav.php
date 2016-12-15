@@ -3,6 +3,25 @@
 	<a href="index.php" class="active item">
 		Inicio
 	</a>
+	<?php
+		include_once 'api/internal/categories.php';
+		$categoriesList = api_internal_categories_getAllCategoriesData();
+		echo '
+			<div class="drop ui dropdown item">
+				Categorías
+				<div class="menu">
+			';
+				
+				foreach($categoriesList as $category){
+					echo '<a href="index.php?productCategoryId='.$category["id"].'" class="item">'.$category['name'].'</a>';
+				}
+			echo '
+				</div>
+				<i class="dropdown icon"></i>
+			</div>
+		';
+	?>
+	
 	<div class="right menu">
 		
 		<?php
@@ -17,12 +36,20 @@
 						<a href="admin-list-users.php"class="ui item">
 							Area de administración
 						</a>
-						<div class="ui dropown">
-														
-						</div>
 						';
+						
 				}
 				echo '
+					<div class="drop ui dropdown item">
+						Carro de compras
+						<i class="cart icon"></i>
+						<div class="menu">
+							<a href="client-show-cart.php" class="item">Visualizar carrito</a>
+							<a href="client-show-story.php" class="item">Historial de compras</a>
+							<a href="client-edit-profile.php" class="item">Completar datos personales</a>
+							<!--<a href="client-show-cart.php?operation=end" class="item">Finalizar compra</a>-->
+						</div>
+					</div>
 					<a href="api/logout.php"class="ui item">
 						Salir
 					</a>
@@ -39,6 +66,11 @@
 	</div>
 	</div>
 </div>
+<script>
+	$(".drop.ui.dropdown.item").dropdown({
+		on: 'hover'
+	});
+</script>
 
 
 

@@ -19,7 +19,7 @@
 <html lang="en">
 
 <head>
-	<?php include("clientSections/sections/header.php") ?>
+	<?php include("clientSections/sections/head.php") ?>
 </head>
 
 <body style="background-color: #E9E9E9">
@@ -85,7 +85,6 @@
 	</div>
 	</div>
 </body>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/md5.js"></script>
-<script src="js/login.js">
-</script>
+<script src="js/md5.js"></script>
+<script src="js/login.js"></script>
 </html>

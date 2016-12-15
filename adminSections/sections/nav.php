@@ -19,7 +19,7 @@
 			if(isset($_SESSION['name'])){
 				echo '
 					<div class="ui item">
-						Bienvenido '.$_SESSION['name'].' 
+						Bienvenido, '.$_SESSION['name'].'! 
 					</div>
 					<a href="api/logout.php"class="ui item">
 						Salir

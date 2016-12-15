@@ -87,7 +87,8 @@
 					foreach($product as $key=>$value){
 						if($key=="sale_id" || $key=="product_id") continue;
 						if($key=="product_name"){
-							echo '<td class="center aligned"><a href="client-detail-product.php?code='.$product["product_code"].'">'.$value.'</a></td>';	
+							echo '<td class="center aligned"><a href="client-detail-product.php?code='.$product["product_code"].'">'.$value.'</a></td>';
+							continue;	
 						}
 						echo '<td class="center aligned">'.$value.'</td>';
 					}
