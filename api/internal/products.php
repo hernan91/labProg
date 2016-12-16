@@ -340,7 +340,6 @@
 		if(!empty($productManufacturer)) $query .= "AND P.`manufacturer` LIKE '%$productManufacturer%' ";	
 		if(!empty($productMinPrice)) $query .= "AND P.`price` >= '$productMinPrice' ";	
 		if(!empty($productMaxPrice)) $query .= "AND P.`price` <= '$productMaxPrice' ";
-		echo $query;
 		$con = new Conexion();
 		if($con->connect()){
 			$rows = array();

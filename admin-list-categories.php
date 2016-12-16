@@ -42,8 +42,7 @@
 			<div class="field">
 				<div class="ui action left icon input">
 					<i class="search icon"></i>
-					<input name="user" type="text" value="<?php echo $searchedCategory?$searchedCategory:''?>" placeholder="Introducir usuario">
-					<div class="ui button" id="botonBusqueda">Buscar</div>
+					<input id="inputBusqueda" name="user" type="text" value="<?php echo $searchedCategory?$searchedCategory:''?>" placeholder="Introducir usuario">
 				</div>
 			</div>
 			<div class="field">
@@ -58,7 +57,7 @@
 
 	<div class="ui clearing horizontal divider">-</div>
 
-	<table class="ui selectable celled table">
+	<table id="dataTable" class="ui selectable celled table">
 		<thead>
 			<tr>
 				<div class="ui sub header">Categorías registradas en el sistema</div>
@@ -79,6 +78,10 @@
 					foreach($row as $key=>$value){
 						if($key=="id"){
 							$id = $value;
+							continue;
+						}
+						else if($key=="name"){
+							echo '<td class="td center aligned">'.$value.'</td>';
 							continue;
 						}
 						else if($key=="description"){
@@ -146,17 +149,19 @@
 			$(this).closest('.message').transition('fade');
 		});
 		$('#buscarDrop.ui.dropdown').dropdown();
-		$('#botonBusqueda').click(function(e){
-			e.preventDefault();
-			$('form#formFiltro').submit();
-		});
 
 		$('.buttonDescription').click(function(e){
 			e.preventDefault();
 			let id = $(e.target).attr('data-id');
 			$('#modal'+id+'.description.ui.modal').modal('show');	
 		});
-		
+		let oldVal = "";
+		$('input').on('input keyup', function(e) {
+			$( ".td" ).each(function( index ) {
+  				if($(this).text().toUpperCase().indexOf($('#inputBusqueda').val().toUpperCase()) < 0) $(this).parent().hide();
+				else $(this).parent().show();
+			});
+		});
 	});
 </script>
 <?php 

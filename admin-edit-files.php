@@ -2,6 +2,7 @@
 	define('PAGE', "admin-edit-files");
 	define('LEVEL', 2);
 	include_once 'api/auth.php';
+	include 'api/files.php';
 ?>
 <?php 
 	include("adminSections/section-top.php");
@@ -63,11 +64,18 @@
 			}
 		}
 		if(isset($_FILES['videoFile'])){
+			$dir = "data/video/products/";
 			$product_id = $_POST['product_id'];
 			$videoFileType = pathinfo($_FILES["videoFile"]["name"], PATHINFO_EXTENSION);
-			$file = 'data/video/products/'.$product_id.'.'.$videoFileType;
+			$random = api_files_getRandom();
+			while(api_files_randExists($random, $dir)){
+				$random = api_files_getRandom();
+			}
+			$file = $dir.$product_id.'-'.$random.'.'.$videoFileType;
 
 			if(!filesize($_FILES["videoFile"]["tmp_name"]))	echo '<script type="text/javascript">window.location.href="?error=El%20archivo%20no%20es%20una%20imágen&code='.$productCode.'</script>';
+			$fileExists = api_files_getFilePathById($product_id, $dir);
+			if(!empty($fileExists)) unlink($fileExists);
 			if ($_FILES["videoFile"]["size"] > 50000000) echo '<script type="text/javascript">window.location.href="?error=Archivo%20demasiado%20grande%20&code='.$productCode.'"</script>';
 			if($videoFileType != "mp4" && $videoFileType != "ogg") echo '<script type="text/javascript">window.location.href="?error=Formato%20incorrecto.%20Solo%20mp4y%20ogg.&code='.$productCode.'"</script>';
 			if (move_uploaded_file($_FILES["videoFile"]["tmp_name"], $file)){
@@ -88,14 +96,15 @@
 		echo '<script type="text/javascript">window.location.href="?error=Hubo%20un%20error%20al%borrar%20la%20imagen&code='.$productCode.'"</script>';
 	}
 	if(isset($_GET['videoRemoveProductId'])){  //videoFileRemoveProductId
+		$dir = "data/video/products/";
 		$productId = $_GET['videoRemoveProductId'];
 		$videoExtension = $_GET['videoExtension'];
-		$file = "data/video/products/".$productId.".".$videoExtension;
+		$file = api_files_getFilePathById($productId, $dir);
 		if(unlink($file)){
 			api_internal_videos_removeVideoExtension($productCode);
 			echo '<script type="text/javascript">window.location.href="?code='.$productCode.'&success=Video%20borrado%20correctamente"</script>';
 		}
-		echo '<script type="text/javascript">window.location.href="?error=Hubo%20un%20error%20al%borrar%20el%20video&code='.$productCode.'"</script>';
+		echo '<script type="text/javascript">window.location.href="?error=Hubo%20un%20error%20al%20borrar%20el%20video&code='.$productCode.'"</script>';
 	}
 	
 
@@ -165,8 +174,13 @@
 		<div class="seven wide column">
 			<div class="ui segment">
 				<?php
-					echo '<i data-code="'.$productCode.'" data-product-id="'.$productData['id'].'" video-ext="'.$productData['videoExtension'].'" id="videoRemove" class="remove icon"></i>';
-					if($productData['videoExtension']) echo '<video src="data/video/products/'.$productData['id'].'.'.$productData['videoExtension'].'" width="366" controls></video>';
+					$path = api_files_getFilePathById($productData['id'], "data/video/products/");
+					$hideVideo = false;
+					if(empty($path)) $hideVideo = true;
+					if($productData['videoExtension']&&!$hideVideo){
+						echo '<i data-code="'.$productCode.'" data-product-id="'.$productData['id'].'" video-ext="'.$productData['videoExtension'].'" id="videoRemove" class="remove icon"></i>';
+						echo '<video src="'.$path.'" width="366" controls></video>';
+					}
 					else echo 'No existe video para mostrar';
 				?>
 				<form id="videoForm" class="ui form" class="ui form" action="" method="post" enctype="multipart/form-data">

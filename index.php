@@ -77,11 +77,11 @@
 						<div class="fields">
 							<div class="field">
 								<label>Precio min</label>
-								<input type="number" placeholder="Minimo" name="productMinPrice" value="<?php echo (isset($productMinPrice)&&$productMinPrice)?$productMinPrice:"" ?>">	
+								<input type="number" placeholder="Minimo" name="productMinPrice" min="0" value="<?php echo (isset($productMinPrice)&&$productMinPrice)?$productMinPrice:"" ?>">	
 							</div>
 							<div class="field">
 								<label>Precio max</label>
-								<input type="number" placeholder="Máximo" name="productMaxPrice" value="<?php echo (isset($productMaxPrice)&&$productMaxPrice)?$productMaxPrice:"" ?>">
+								<input type="number" placeholder="Máximo" name="productMaxPrice" min="0" value="<?php echo (isset($productMaxPrice)&&$productMaxPrice)?$productMaxPrice:"" ?>">
 							</div>
 						</div>
 					</div>
