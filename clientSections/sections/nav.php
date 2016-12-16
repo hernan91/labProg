@@ -1,5 +1,8 @@
 <div class="ui container">
-	<div class="ui secondary pointing menu">
+	<div class="ui  fixed pointing menu">
+	<div class="item">
+		<h3>TecnoStore Tienda</h3>
+	</div>
 	<a href="index.php" class="<?php echo (PAGE=="index")?"active":""?> item">
 		Inicio
 	</a>

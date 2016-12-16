@@ -12,7 +12,7 @@
 <body>
 
 	<header>
-		<?php include("adminSections/sections/header.php") ?>
+		
 	</header>
 
 	<nav>
@@ -20,7 +20,7 @@
 	</nav>
 
 	<aside>
-		<?php include("adminSections/sections/aside.php") ?>
+		
 	</aside>
 
 	<section style="margin-top:100px">

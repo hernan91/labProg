@@ -10,7 +10,7 @@
 	</head>
 <body style="background-color: #E9E9E9;">
 	<header>
-		<?php include("clientSections/sections/header.php") ?>
+		
 	</header>
 	<nav>
 		<?php include("clientSections/sections/nav.php") ?>
@@ -18,9 +18,9 @@
 
 	<aside>
 		<?php
-			if(PAGE=='index' || PAGE=='client-detail-product') include("clientSections/sections/aside.php"); 
+			
 		?>
-		<?php include("clientSections/sections/cart.php") ?>
+		
 	</aside>
 
 	<section style="margin-top:60px">
