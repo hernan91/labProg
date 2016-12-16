@@ -27,6 +27,10 @@
 										echo '<td class="center aligned"><a href="client-detail-product.php?code='.$product["product_code"].'">'.$value.'</a></td>';
 										continue;	
 									}
+									if($key=="product_price"){
+										echo '<td class="center aligned">$'.$value.'</td>';
+										continue;
+									} 
 									echo '<td class="center aligned">'.$value.'</td>';
 								}
 								echo '</tr>';
