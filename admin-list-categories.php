@@ -37,7 +37,6 @@
 
 <div class="ui segment">
 	<div class="ui sub header">Filtro</div>
-	<form class="ui form" id="formFiltro">
 		<div class="inline fields">
 			<div class="field">
 				<div class="ui action left icon input">
@@ -45,15 +44,7 @@
 					<input id="inputBusqueda" name="user" type="text" value="<?php echo $searchedCategory?$searchedCategory:''?>" placeholder="Introducir usuario">
 				</div>
 			</div>
-			<div class="field">
-				<a href="admin-add-category.php">
-					<div class="ui right floated basic blue small labeled icon button">
-						<i class="plus icon"></i> Agregar categoría
-					</div>
-				</a>
-			</div>
 		</div>
-	</form>
 
 	<div class="ui clearing horizontal divider">-</div>
 
@@ -155,8 +146,7 @@
 			let id = $(e.target).attr('data-id');
 			$('#modal'+id+'.description.ui.modal').modal('show');	
 		});
-		let oldVal = "";
-		$('input').on('input keyup', function(e) {
+		$('#inputBusqueda').on('input keyup', function(e) {
 			$( ".td" ).each(function( index ) {
   				if($(this).text().toUpperCase().indexOf($('#inputBusqueda').val().toUpperCase()) < 0) $(this).parent().hide();
 				else $(this).parent().show();

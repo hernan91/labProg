@@ -36,24 +36,14 @@
 
 <div class="ui segment">
 	<div class="ui sub header">Filtro</div>
-	<form class="ui form" id="formFiltro">
 		<div class="inline fields">
 			<div class="field">
 				<div class="ui action left icon input">
 					<i class="search icon"></i>
-					<input name="user" type="text" value="<?php echo $searchedUser?$searchedUser:''?>" placeholder="Introducir producto">
-					<div class="ui button" id="botonBusqueda">Buscar</div>
+					<input id="inputBusqueda" name="user" type="text" placeholder="Introducir producto">
 				</div>
 			</div>
-			<div class="field">
-				<a href="admin-add-product.php">
-					<div class="ui right floated basic blue small labeled icon button">
-						<i class="plus icon"></i> Agregar producto
-					</div>
-				</a>
-			</div>
 		</div>
-	</form>
 
 	<div class="ui clearing horizontal divider">-</div>
 
@@ -82,6 +72,10 @@
 					$code;
 					foreach($row as $key=>$value){
 						if($key=="code") $code = $value;
+						if($key=="name"){
+							echo '<td class="td center aligned">'.$value.'</td>';
+							continue;
+						}  
 						echo '<td class="center aligned">'.$value.'</td>';
 					}
 					echo 	'<td class="center aligned">
@@ -127,9 +121,11 @@
 		$(this).closest('.message').transition('fade');
 	});
 	$('#buscarDrop.ui.dropdown').dropdown();
-	$('#botonBusqueda').click(function(e){
-		e.preventDefault();
-		$('form#formFiltro').submit();
+	$('#inputBusqueda').on('input keyup', function(e) {
+		$( ".td" ).each(function( index ) {
+			if($(this).text().toUpperCase().indexOf($('#inputBusqueda').val().toUpperCase()) < 0) $(this).parent().hide();
+			else $(this).parent().show();
+		});
 	});
 </script>
 <?php 
