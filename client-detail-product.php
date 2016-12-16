@@ -2,6 +2,7 @@
 	define('PAGE', "client-detail-product"); 
 	define('LEVEL', 1);
 	include_once 'api/auth.php';
+	include_once 'api/files.php';
 ?>
 <?php 
 	include("clientSections/section-top.php");
@@ -60,7 +61,7 @@
 							<div class="ui divider"></div>
 							
 							<div style="display: <?php echo isset($_SESSION['logged'])?"block":"none"?>"class="item">
-								<b class="res">Precio</b><?php echo $productData['price']?>
+								<b class="res">Precio</b>$<?php echo $productData['price']?>
 							</div>
 							<div class="ui divider"></div>
 							
@@ -83,7 +84,7 @@
 					</div>
 					<div class="ui bottom attached tab segment" data-tab="third">
 						<?php
-							if($productData['videoExtension']) echo '<video src="data/video/products/'.$productData['id'].'.'.$productData['videoExtension'].'" width="406" controls></video>';
+							if($productData['videoExtension']) echo '<video src="'.api_files_getVideoPathById($productData['id']).'" width="406" controls></video>';
 							else echo 'No existe video para mostrar';
 						?>
 					</div>

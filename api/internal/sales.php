@@ -29,8 +29,8 @@
 		$con = new Conexion();
 		if($con->connect()){
 			$query = "SELECT `id`,`date` FROM `sales` WHERE `id_user`='$userId' AND `selled`=1";
-			if(!empty($fromDate)) $query.= " AND `date`>'$fromDate'";
-			if(!empty($upToDate)) $query.= " AND `date`<'$upToDate'";
+			if(!empty($fromDate)) $query.= " AND `date`>='$fromDate'";
+			if(!empty($upToDate)) $query.= " AND `date`<='$upToDate'";
 			$rows = array();
 			if($result = $con->query($query)){
 				while($r = mysqli_fetch_assoc($result)) {

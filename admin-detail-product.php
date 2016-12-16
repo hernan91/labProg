@@ -8,6 +8,7 @@
 <?php 
 	include("adminSections/section-top.php");
 	include_once("api/internal/products.php");
+	include_once("api/files.php")
 ?>
 <?php
 	$code = isset($_GET['code'])?$_GET['code']:die('<h3>Se produjo un problema al realizar la consulta</h3>');
@@ -74,7 +75,7 @@
 						<b class="res">Nombre</b><?php echo $productData['name']?>
 						<div class="ui divider"></div>
 						
-						<b class="res">Precio</b><?php echo $productData['price']?>
+						<b class="res">Precio</b>$<?php echo $productData['price']?>
 						<div class="ui divider"></div>
 						
 						<b class="res">Categoría</b><?php echo $productData['catName']?>
@@ -99,7 +100,7 @@
 				</div>
 				<div class="ui bottom attached tab segment" data-tab="third">
 					<?php
-						if($productData['videoExtension']) echo '<video src="data/video/products/'.$productData['id'].'.'.$productData['videoExtension'].'" width="406" controls></video>';
+						if($productData['videoExtension']) echo '<video src="'.api_files_getVideoPathById($productData['id']).'" width="406" controls></video>';
 						else echo 'No existe video para mostrar';
 					?>
 				</div>

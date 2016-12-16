@@ -75,7 +75,11 @@
 						if($key=="name"){
 							echo '<td class="td center aligned">'.$value.'</td>';
 							continue;
-						}  
+						}
+						if($key=="price"){
+							echo '<td class="center aligned">$'.$value.'</td>';
+							continue;
+						}
 						echo '<td class="center aligned">'.$value.'</td>';
 					}
 					echo 	'<td class="center aligned">
