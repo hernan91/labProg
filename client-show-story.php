@@ -9,7 +9,6 @@
 	include_once 'components/saleTable.php';
 ?>
 <?php
-
 	
 	
 	if(isset($_GET['fromDate']) || isset($_GET['upToDate'])){
